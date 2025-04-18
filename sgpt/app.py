@@ -24,8 +24,7 @@ from sgpt.utils import (
 
 
 def main(
-    prompt: str = typer.Argument(
-        "",
+    args_prompt: list[str] = typer.Argument(
         show_default=False,
         help="The prompt to generate completions for.",
     ),
@@ -155,6 +154,7 @@ def main(
         hidden=True,  # Hiding since should be used only once.
     ),
 ) -> None:
+    prompt = " ".join(args_prompt) if args_prompt else None
     stdin_passed = not sys.stdin.isatty()
 
     if stdin_passed:
