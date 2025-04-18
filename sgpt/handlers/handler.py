@@ -114,6 +114,9 @@ class Handler:
 
         try:
             for chunk in response:
+                if not chunk.choices: # the last part of the streaming chunk, containing the usage data, but no llm text output.
+                    yield ""
+                    continue
                 delta = chunk.choices[0].delta
 
                 # LiteLLM uses dict instead of Pydantic object like OpenAI does.
