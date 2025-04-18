@@ -52,6 +52,7 @@ dev = [
 ]
 
 [project.scripts]
+sm = "sgpt:cli"
 sgpt = "sgpt:cli"
 
 [project.urls]
