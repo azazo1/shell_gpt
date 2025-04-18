@@ -37,6 +37,7 @@ DEFAULT_CONFIG = {
     "SHELL_INTERACTION": os.getenv("SHELL_INTERACTION ", "true"),
     "OS_NAME": os.getenv("OS_NAME", "auto"),
     "SHELL_NAME": os.getenv("SHELL_NAME", "auto"),
+    "TEXT_LANG": os.getenv("TEXT_LANG", "en")
     # New features might add their own config variables here.
 }
 

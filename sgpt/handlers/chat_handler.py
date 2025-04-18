@@ -165,7 +165,7 @@ class ChatHandler(Handler):
     def make_messages(self, prompt: str) -> List[Dict[str, str]]:
         messages = []
         if not self.initiated:
-            messages.append({"role": "system", "content": self.role.role})
+            messages.append({"role": "system", "content": self.role.role.format(text_lang=cfg.get("TEXT_LANG"))})
         messages.append({"role": "user", "content": prompt})
         return messages
 

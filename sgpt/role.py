@@ -41,7 +41,11 @@ If you need to store any data, assume it will be stored in the conversation.
 APPLY MARKDOWN formatting when possible."""
 # Note that output for all roles containing "APPLY MARKDOWN" will be formatted as Markdown.
 
-ROLE_TEMPLATE = "You are {name}\n{role}"
+# In the template, the {{text_lang}} should be stored as {text_lang} in the .json file.
+# {text_lang} will be replaced by the real text language when script makes requests.
+ROLE_TEMPLATE = (
+    """You are {name} who always speak in language: {{text_lang}}.\n{role}\nALWAYS response in LANGUAGE: {{text_lang}}."""
+)
 
 
 class SystemRole:
