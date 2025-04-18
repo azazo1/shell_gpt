@@ -237,10 +237,14 @@ def main(
             functions=function_schemas,
         )
 
+    history = [
+        {"role": "user", "content": prompt},
+        {"role": "assistant", "content": full_completion},
+    ]
     while shell and interaction:
         option = typer.prompt(
-            text="[E]xecute, [D]escribe, [A]bort",
-            type=Choice(("e", "d", "a", "y"), case_sensitive=False),
+            text="[E]xecute, [D]escribe, [A]bort, [M]odify",
+            type=Choice(("e", "d", "a", "m", "y"), case_sensitive=False),
             default="e" if cfg.get("DEFAULT_EXECUTE_SHELL_CMD") == "true" else "a",
             show_choices=False,
             show_default=False,
@@ -248,6 +252,20 @@ def main(
         if option in ("e", "y"):
             # "y" option is for keeping compatibility with old version.
             run_command(full_completion)
+        elif option == "m":
+            new_prompt = typer.prompt(">>>", prompt_suffix=" ")
+            full_completion = DefaultHandler(role_class, md).handle(
+                prompt=prompt + new_prompt,
+                model=model,
+                temperature=temperature,
+                top_p=top_p,
+                caching=cache,
+                functions=function_schemas,
+                history=history,
+            )
+            history.append({"role": "user", "content": new_prompt})
+            history.append({"role": "assistant", "content": full_completion})
+            continue
         elif option == "d":
             DefaultHandler(DefaultRoles.DESCRIBE_SHELL.get_role(), md).handle(
                 full_completion,

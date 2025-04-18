@@ -53,7 +53,9 @@ class Handler:
             else TextPrinter(self.color)
         )
 
-    def make_messages(self, prompt: str) -> List[Dict[str, str]]:
+    def make_messages(
+        self, prompt: str, history: Optional[List[Dict[str, str]]]=None
+    ) -> List[Dict[str, str]]:
         raise NotImplementedError
 
     def handle_function_call(
@@ -114,7 +116,7 @@ class Handler:
 
         try:
             for chunk in response:
-                if not chunk.choices: # the last part of the streaming chunk, containing the usage data, but no llm text output.
+                if not chunk.choices:  # the last part of the streaming chunk, containing the usage data, but no llm text output.
                     yield ""
                     continue
                 delta = chunk.choices[0].delta
@@ -153,10 +155,11 @@ class Handler:
         top_p: float,
         caching: bool,
         functions: Optional[List[Dict[str, str]]] = None,
+        history: Optional[List[Dict[str, str]]] = None,
         **kwargs: Any,
     ) -> str:
         disable_stream = cfg.get("DISABLE_STREAMING") == "true"
-        messages = self.make_messages(prompt.strip())
+        messages = self.make_messages(prompt.strip(), history)
         generator = self.get_completion(
             model=model,
             temperature=temperature,
